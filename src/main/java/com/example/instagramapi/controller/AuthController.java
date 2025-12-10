@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Auth", description = "인증 API")
+@Tag(name = "Auth", description = "authentication") // swagger 이름 설정 어노테이션
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(summary = "회원가입")
+    @Operation(summary = "회원가입") // @Operation : swagger-ui.html 설정
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<UserResponse>> signup(
             @Valid @RequestBody SignupRequest request) {
