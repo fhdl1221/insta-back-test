@@ -6,6 +6,8 @@ import com.example.instagramapi.entity.Post;
 import com.example.instagramapi.entity.User;
 import com.example.instagramapi.exception.CustomException;
 import com.example.instagramapi.exception.ErrorCode;
+import com.example.instagramapi.repository.CommentRepository;
+import com.example.instagramapi.repository.PostLikeRepository;
 import com.example.instagramapi.repository.PostRepository;
 import com.example.instagramapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,8 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public PostResponse create(Long userId, PostCreateRequest request) {
@@ -38,18 +42,19 @@ public class PostService {
     }
 
     // 전체 게시물
-    public List<PostResponse> findAll() {
+    public List<PostResponse> findAll(Long currentUserId) {
         List<Post> posts = postRepository.findAllWithUser();
         return posts.stream()
-                .map(PostResponse::from)
+                .map(post -> toPostResponseWithStates(post, currentUserId))
                 .toList();
     }
 
     // 단일 게시물
-    public PostResponse findById(Long postId) {
+    public PostResponse findById(Long postId, Long currentUserId) {
         Post post = postRepository.findByWithUser(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-        return PostResponse.from(post);
+//        return PostResponse.from(post);
+        return toPostResponseWithStates(post, currentUserId);
     }
 
     // 특정 사용자 게시물
@@ -75,5 +80,14 @@ public class PostService {
         }
 
         postRepository.delete(post);
+    }
+
+    private PostResponse toPostResponseWithStates(Post post, Long currentUserId) {
+        boolean liked = currentUserId != null
+                && postLikeRepository.existsByUserIdAndPostId(currentUserId, post.getId());
+        long likeCount = postLikeRepository.countByPostId(post.getId());
+        long commentCount = commentRepository.countByPostId(post.getId());
+
+        return PostResponse.from(post, liked, likeCount, commentCount);
     }
 }
