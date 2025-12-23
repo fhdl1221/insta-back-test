@@ -1,5 +1,6 @@
 package com.example.instagramapi.service;
 
+
 import com.example.instagramapi.dto.request.CommentCreateRequest;
 import com.example.instagramapi.dto.response.CommentResponse;
 import com.example.instagramapi.entity.Comment;
@@ -22,8 +23,8 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public CommentResponse create(
@@ -48,7 +49,7 @@ public class CommentService {
     }
 
     public List<CommentResponse> findByPostId(Long postId) {
-        if(!postRepository.existsById(postId)) {
+        if (!postRepository.existsById(postId)) {
             throw new CustomException(ErrorCode.POST_NOT_FOUND);
         }
 
@@ -59,14 +60,17 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(Long commentId, Long userId){
+    public void delete(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
-        if(!comment.getUser().getId().equals(userId)) {
+        if (!comment.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.NOT_COMMENT_OWNER);
         }
 
         commentRepository.delete(comment);
     }
+
+
+
 }

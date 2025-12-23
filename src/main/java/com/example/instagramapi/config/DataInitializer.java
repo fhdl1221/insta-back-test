@@ -24,11 +24,11 @@ public class DataInitializer implements CommandLineRunner {
 
         User test = userRepository.save(
                 User.builder()
-                        .username("test")
-                        .password(encodedPassword)
-                        .name("test")
-                        .email("test@test.com")
-                        .build()
+                    .username("test")
+                    .password(encodedPassword)
+                    .name("test")
+                    .email("test@test.com")
+                    .build()
         );
 
         User admin = userRepository.save(
@@ -52,10 +52,10 @@ public class DataInitializer implements CommandLineRunner {
         // 게시물 생성
         Post post1 = postRepository.save(
                 Post.builder()
-                        .content("sample post1")
-                        .imageUrl("/uploads/sample1.png")
-                        .user(admin)
-                        .build()
+                    .content("sample post1")
+                    .imageUrl("/uploads/sample1.png")
+                    .user(admin)
+                    .build()
         );
 
         Post post2 = postRepository.save(
@@ -65,6 +65,18 @@ public class DataInitializer implements CommandLineRunner {
                         .user(test)
                         .build()
         );
+
+        Post post3 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample1.jpg").user(test).build());
+        Post post4 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample2.jpg").user(test).build());
+        Post post5 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample1.jpg").user(test).build());
+        Post post6 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample2.jpg").user(test).build());
+        Post post7 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample1.jpg").user(test).build());
+        Post post8 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample2.jpg").user(test).build());
+        Post post9 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample1.jpg").user(test).build());
+        Post post10 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample2.jpg").user(test).build());
+        Post post11 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample1.jpg").user(test).build());
+        Post post12 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample2.jpg").user(test).build());
+        Post post13 = postRepository.save(Post.builder().content("sample post2").imageUrl("/uploads/sample1.jpg").user(test).build());
 
     }
 }

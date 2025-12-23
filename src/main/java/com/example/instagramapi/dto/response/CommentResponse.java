@@ -1,5 +1,6 @@
 package com.example.instagramapi.dto.response;
 
+
 import com.example.instagramapi.entity.Comment;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class CommentResponse {
-
     private Long id;
     private String content;
     private UserResponse author;
@@ -23,4 +23,5 @@ public class CommentResponse {
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
+
 }

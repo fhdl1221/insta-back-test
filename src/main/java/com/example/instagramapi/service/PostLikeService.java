@@ -1,5 +1,6 @@
 package com.example.instagramapi.service;
 
+
 import com.example.instagramapi.dto.response.LikeResponse;
 import com.example.instagramapi.entity.Post;
 import com.example.instagramapi.entity.PostLike;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostLikeService {
-
     private final PostLikeRepository postLikeRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -31,7 +31,7 @@ public class PostLikeService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         // 이미 좋아요 했는지 확인
-        if(postLikeRepository.existsByUserIdAndPostId(userId, postId)) {
+        if (postLikeRepository.existsByUserIdAndPostId(userId, postId)) {
             throw new CustomException(ErrorCode.ALREADY_LIKED);
         }
 
@@ -48,21 +48,22 @@ public class PostLikeService {
 
     @Transactional
     public LikeResponse unlike(Long userId, Long postId) {
-        if(!postRepository.existsById(postId)) {
+        if (!postRepository.existsById(postId)) {
             throw new CustomException(ErrorCode.POST_NOT_FOUND);
         }
 
-        PostLike postLike = postLikeRepository.findByUserIdAndPostId(userId, postId)
+        PostLike postlike = postLikeRepository.findByUserIdAndPostId(userId, postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_LIKED));
 
-        postLikeRepository.delete(postLike);
+        postLikeRepository.delete(postlike);
 
         long likeCount = postLikeRepository.countByPostId(postId);
         return LikeResponse.of(false, likeCount);
+
     }
 
     public LikeResponse getLikeStatus(Long postId, Long userId) {
-        if(!postRepository.existsById(postId)) {
+        if (!postRepository.existsById(postId)) {
             throw new CustomException(ErrorCode.POST_NOT_FOUND);
         }
 
@@ -72,3 +73,26 @@ public class PostLikeService {
         return LikeResponse.of(liked, likeCount);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

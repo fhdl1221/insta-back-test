@@ -1,5 +1,6 @@
 package com.example.instagramapi.entity;
 
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +13,7 @@ import java.util.List;
 @Table(name = "posts")
 @Getter
 @NoArgsConstructor
-public class Post extends BaseTimeEntity {
-
+public class Post extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,10 +27,10 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<PostLike> likes = new ArrayList<>();
 
     @Builder
@@ -40,3 +40,12 @@ public class Post extends BaseTimeEntity {
         this.user = user;
     }
 }
+
+
+
+
+
+
+
+
+

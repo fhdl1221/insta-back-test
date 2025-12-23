@@ -1,5 +1,6 @@
 package com.example.instagramapi.service;
 
+
 import com.example.instagramapi.dto.request.PostCreateRequest;
 import com.example.instagramapi.dto.response.PostResponse;
 import com.example.instagramapi.entity.Post;
@@ -17,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PostService {
 
     private final PostRepository postRepository;
@@ -37,7 +38,7 @@ public class PostService {
                 .user(user)
                 .build();
 
-        Post saved =  postRepository.save(post);
+        Post saved = postRepository.save(post);
         return PostResponse.from(saved);
     }
 
@@ -45,49 +46,52 @@ public class PostService {
     public List<PostResponse> findAll(Long currentUserId) {
         List<Post> posts = postRepository.findAllWithUser();
         return posts.stream()
-                .map(post -> toPostResponseWithStates(post, currentUserId))
+                .map(post -> toPostResponseWithStats(post, currentUserId))
                 .toList();
     }
 
     // 단일 게시물
     public PostResponse findById(Long postId, Long currentUserId) {
-        Post post = postRepository.findByWithUser(postId)
+        Post post = postRepository.findByIdWithUser(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 //        return PostResponse.from(post);
-        return toPostResponseWithStates(post, currentUserId);
+        return toPostResponseWithStats(post, currentUserId);
     }
 
     // 특정 사용자 게시물
-    public List<PostResponse> findByUsername(String username) {
+    public List<PostResponse> findByUsername(String username, Long currentUserId) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         List<Post> posts = postRepository.findByUserIdWithUser(user.getId());
 
         return posts.stream()
-                .map(PostResponse::from)
+                .map(post -> toPostResponseWithStats(post, currentUserId))
                 .toList();
     }
 
-    // 게시물 삭제
     @Transactional
     public void delete(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        if(!post.getUser().getId().equals(userId)) {
+        if (!post.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.NOT_POST_OWNER);
         }
 
         postRepository.delete(post);
+
+
     }
 
-    private PostResponse toPostResponseWithStates(Post post, Long currentUserId) {
-        boolean liked = currentUserId != null
+    private PostResponse toPostResponseWithStats(Post post, Long currentUserId) {
+        boolean liked  = currentUserId != null
                 && postLikeRepository.existsByUserIdAndPostId(currentUserId, post.getId());
         long likeCount = postLikeRepository.countByPostId(post.getId());
         long commentCount = commentRepository.countByPostId(post.getId());
 
         return PostResponse.from(post, liked, likeCount, commentCount);
+
     }
+
 }

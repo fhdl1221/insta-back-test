@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostCreateRequest {
 
-    @NotBlank(message = "내용은 필수입니다")
-    @Size(max = 2000, message = "내용은 2000자까지")
+    @NotBlank(message = "내용은 필수입니다.")
+    @Size(max = 2000, message = "내용은 2000자 까지.")
     private String content;
 
     private String imageUrl;

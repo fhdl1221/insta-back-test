@@ -1,6 +1,7 @@
 package com.example.instagramapi.dto.response;
 
 import com.example.instagramapi.entity.Post;
+import com.example.instagramapi.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -34,7 +35,12 @@ public class PostResponse {
                 .build();
     }
 
-    public static PostResponse from(Post post, boolean liked, long likeCount, long commentCount) {
+    public static PostResponse from(
+            Post post,
+            boolean liked,
+            long likeCount,
+            long commentCount
+    ) {
         return PostResponse.builder()
                 .id(post.getId())
                 .content(post.getContent())
@@ -46,4 +52,5 @@ public class PostResponse {
                 .commentCount(commentCount)
                 .build();
     }
+
 }

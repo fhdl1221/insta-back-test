@@ -1,16 +1,17 @@
 package com.example.instagramapi.entity;
 
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Entity
 @Table(name = "comments")
 @Getter
 @NoArgsConstructor
 public class Comment extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
